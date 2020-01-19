@@ -40,7 +40,6 @@ RUN apt-get update && apt-get install -y \
   xorg-dev \
   zlib1g-dev \
   zsh
-#  vim-gnome \
 
 RUN groupadd -g 1000 $GROUP
 RUN useradd -g $GROUP -G sudo -m -s /bin/bash $USER
@@ -52,9 +51,6 @@ RUN echo "root:${PASS}" | chpasswd
 # SSH settings. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 RUN sed -e 's@#Port 22@Port 22@' -e 's@#AddressFamily any@AddressFamily inet@' -i /etc/ssh/sshd_config
-
-# Note: The latest tornado(6.0.1) caused a problem not to connect to jupyter kernel; tornado==5.1.1 is a W/A.
-#RUN pip3 install numpy tensorflow opencv-python Pillow scipy matplotlib pandas keras jupyter tornado==5.1.1
 
 # Locale
 ARG LANGVAL=en_US.utf8
@@ -86,16 +82,10 @@ RUN echo 'alias h=history' >> /home/$USER/.profile
 RUN echo 'alias vi=vim' >> /home/$USER/.profile
 
 RUN echo 'PS1="\$ "' >> /home/$USER/.bashrc
-#RUN echo 'set background=dark' > /home/$USER/.vimrc
-#RUN echo 'syntax on' >> /home/$USER/.vimrc
 RUN touch /home/$USER/.Xauthority && chmod 600 /home/$USER/.Xauthority
 
 USER root
 
-#ADD .netrc /home/$USER
-#ADD .gitconfig /home/$USER
-#RUN mkdir -p /home/$USER/.vim/colors
-#ADD hybrid.vim /home/$USER/.vim/colors/hybrid.vim
 ADD .vimrc /home/$USER/.vimrc
 ADD .gvimrc /home/$USER/.gvimrc
 RUN chown -R $USER:$GROUP /home/$USER/.*vim*
