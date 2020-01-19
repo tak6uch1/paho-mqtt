@@ -72,9 +72,6 @@ RUN echo "$LANGVAL UTF-8" > /etc/locale.gen && \
 
 RUN cp /usr/share/zoneinfo/Japan /etc/localtime
 
-# obniz
-RUN pip install obniz
-
 # paho-mqtt
 RUN pip3 install paho-mqtt
 
